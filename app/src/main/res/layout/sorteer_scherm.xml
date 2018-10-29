@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#2aa5a5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/afstand_button"
+        android:layout_width="124dp"
+        android:layout_height="68dp"
+        android:layout_x="201dp"
+        android:layout_y="192dp"
+        android:background="#2a68a5"
+        android:text="Afstand"
+        tools:layout_editor_absoluteX="193dp"
+        tools:layout_editor_absoluteY="81dp" />
+
+    <Button
+        android:id="@+id/rating_button"
+        android:layout_width="124dp"
+        android:layout_height="68dp"
+        android:layout_x="52dp"
+        android:layout_y="193dp"
+        android:background="#2a68a5"
+        android:text="Rating"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="175dp" />
+
+    <Button
+        android:id="@+id/geopend_button"
+        android:layout_width="124dp"
+        android:layout_height="68dp"
+        android:layout_x="201dp"
+        android:layout_y="108dp"
+        android:background="#2a68a5"
+        android:text="Geopend"
+        tools:layout_editor_absoluteX="193dp"
+        tools:layout_editor_absoluteY="175dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="124dp"
+        android:layout_height="68dp"
+        android:layout_x="49dp"
+        android:layout_y="106dp"
+        android:background="#2a68a5"
+        android:text="Button"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="81dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="118dp"
+        android:layout_y="29dp"
+        android:text="Sorteer op:"
+        android:textColor="#000000"
+        android:textSize="27dp"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="29dp" />
+
+    <Button
+        android:id="@+id/terug_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="143dp"
+        android:layout_y="320dp"
+        android:background="#2a68a5"
+        android:text="Ga terug"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="323dp" />
+
+</AbsoluteLayout>
