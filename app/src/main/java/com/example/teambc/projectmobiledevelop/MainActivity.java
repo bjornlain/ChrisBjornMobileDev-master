@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity  {
         init();
         }
     }
-    protected void onActivityResult(int requestcode,int resultcode,Intent data){
+    public void onActivityResult(int requestcode,int resultcode,Intent data){
         super.onActivityResult(requestcode,resultcode,data);
         if(requestcode==1){
             String message = data.getStringExtra("sortby");
@@ -288,6 +288,8 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 }
                 restName.setText(text);
+            }else{
+                restName.setText(dummyNames[i]);
             }
             restName.setTextSize(18);
             Button infoButton = new Button(this);
