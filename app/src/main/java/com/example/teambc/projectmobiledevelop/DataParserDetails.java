@@ -15,7 +15,7 @@ public class DataParserDetails
     {
         HashMap<String, String> googlePlaceMap = new HashMap<>();
         String NameOfPlace = "-NA-";
-        int rating = 0;
+        double rating = 0;
         String vicinity ="";
         String open ="";
         String website ="";
@@ -36,7 +36,7 @@ public class DataParserDetails
             }
             if (!googlePlaceJSON.getJSONObject("result").isNull("rating"))
             {
-                rating = googlePlaceJSON.getJSONObject("result").getInt("rating");
+                rating = googlePlaceJSON.getJSONObject("result").getDouble("rating");
             }
             if (!googlePlaceJSON.getJSONObject("result").isNull("opening_hours"))
             {

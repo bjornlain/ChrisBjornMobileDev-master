@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity  {
     public float[] latitudeArray = new float[20];
     public float[] longitudeArray = new float[20];
     public double[] distanceArray = new double[20];
-    public int[] ratingArray  = new int[20];
+    public double[] ratingArray  = new double[20];
 
 
     @Override
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sortArrayByRating(){
-        int temp;
+        double temp;
         String tempNames;
         String tempWebsite;
         float tempLatitude;
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity  {
             latitudeArray[i] = Float.parseFloat(restaurant.get("latitude"));
             longitudeArray[i] = Float.parseFloat(restaurant.get("longitude"));
             distanceArray[i] = distance(latitude, latitudeArray[i], longitude, longitudeArray[i]);
-            ratingArray[i] = Integer.parseInt(restaurant.get("rating"));
+            ratingArray[i] = Double.parseDouble(restaurant.get("rating"));
         }
         //sort
         switch (sortby){
