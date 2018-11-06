@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity  {
     public float[] longitudeArray = new float[20];
     public double[] distanceArray = new double[20];
     public double[] ratingArray  = new double[20];
-
+    public boolean[] openArray = new boolean[20];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +213,9 @@ public class MainActivity extends AppCompatActivity  {
             }
         }
     }
+    public void sortArrayByOpening(){
+
+    }
     public static double distance(double lat1, double lat2, double lon1,
                                   double lon2) {
 
@@ -240,6 +243,8 @@ public class MainActivity extends AppCompatActivity  {
             longitudeArray[i] = Float.parseFloat(restaurant.get("longitude"));
             distanceArray[i] = distance(latitude, latitudeArray[i], longitude, longitudeArray[i]);
             ratingArray[i] = Double.parseDouble(restaurant.get("rating"));
+            if()
+
         }
         //sort
         switch (sortby){
@@ -249,6 +254,10 @@ public class MainActivity extends AppCompatActivity  {
             }
             case "distance":{
                 sortArrayByDistance();
+                break;
+            }
+            case"opening":{
+                sortArrayByOpening();
                 break;
             }
         }
