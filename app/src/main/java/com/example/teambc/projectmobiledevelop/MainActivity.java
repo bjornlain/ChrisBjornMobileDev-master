@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity  {
     public int calledFrom;
     public String[] dummyNames = new String[20];
     public String[] websites = new String[20];
-    public Button[] websiteButtons = new Button[20];
     public float[] latitudeArray = new float[20];
     public float[] longitudeArray = new float[20];
     public double[] distanceArray = new double[20];
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity  {
         float tempLongitude;
         for (int i = 1; i < ratingArray.length; i++) {
             for (int j = i; j > 0; j--) {
-                if (ratingArray[j] < ratingArray [j - 1]) {
+                if (ratingArray[j] > ratingArray [j - 1]) {
                     temp = ratingArray[j];
                     ratingArray[j] = ratingArray[j - 1];
                     ratingArray[j - 1] = temp;
@@ -233,9 +232,6 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void initLayout(){
 
-
-
-        // String[] dummyNames = {"Restaurant 1", "Restaurant 2" , "Restaurant 3" , "Restaurant 4", "Restaurant 5","Restaurant 6","Restaurant 7", "Restaurant 8", "Restaurant 9","Restaurant 10"};
         for(int i = 0; i< 20;i++) {
             HashMap<String, String> restaurant = detailsArray.get(i);
             dummyNames[i] = restaurant.get("place_name");
@@ -373,16 +369,7 @@ public class MainActivity extends AppCompatActivity  {
 
         initLayout();
     }
-    public List<Float> checkWhichLocationIsCalled(){
-        List<Float> tempList = new ArrayList<>();
-        if(!(calledFrom == 21)){
-            tempList.add(latitudeArray[calledFrom]);
-            tempList.add(longitudeArray[calledFrom]);
-        }else {
-            tempList.add(1.1f);
-        }
-        return tempList;
-    }
+
     public void browser(View view,String url){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
