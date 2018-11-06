@@ -41,6 +41,16 @@ public class SorteerActivity extends AppCompatActivity {
             }
         });
         geopendButton = (Button) findViewById(R.id.geopend_button);
+        geopendButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("sortby","opening");
+                setResult(RESULT_OK,intent);
+                finish();
+            }
+        });
         terugButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
