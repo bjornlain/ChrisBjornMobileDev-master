@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -38,6 +37,15 @@
         <activity android:name=".googleActivity"
                     >
 
+        </activity>
+        <activity
+            android:name=".RestaurantDetailActivity"
+            android:label="Restaurant zoeker"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.teambc.projectmobiledevelop.MainActivity" />
         </activity>
     </application>
 
