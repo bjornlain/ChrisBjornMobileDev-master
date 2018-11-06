@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -235,6 +236,9 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void initLayout(){
 
+
+
+        // String[] dummyNames = {"Restaurant 1", "Restaurant 2" , "Restaurant 3" , "Restaurant 4", "Restaurant 5","Restaurant 6","Restaurant 7", "Restaurant 8", "Restaurant 9","Restaurant 10"};
         for(int i = 0; i< 20;i++) {
             HashMap<String, String> restaurant = detailsArray.get(i);
             dummyNames[i] = restaurant.get("place_name");
@@ -265,7 +269,7 @@ public class MainActivity extends AppCompatActivity  {
         for(int i = 0; i < dummyNames.length;i++){
             LinearLayout linear = new LinearLayout(this);
             LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-            linear.setWeightSum(100);
+            linearLayoutParams.weight = 100;
             linear.setOrientation(LinearLayout.HORIZONTAL);
             linear.setPadding(10,0,0,10);
             linear.setLayoutParams(linearLayoutParams);
@@ -273,8 +277,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-            LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(0,150);
-            textViewParams.weight = 43;
+            LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT, 20f);
             restName.setLayoutParams(textViewParams);
             if(dummyNames[i].length() > 20){
                 String[] split = dummyNames[i].split(" ");
@@ -297,45 +300,30 @@ public class MainActivity extends AppCompatActivity  {
                 restName.setText(dummyNames[i]);
             }
             restName.setTextSize(18);
+            restName.setMaxLines(2);
+            restName.setEllipsize(TextUtils.TruncateAt.END);
+
+
             Button infoButton = new Button(this);
-            LinearLayout.LayoutParams infoLayoutParams = new LinearLayout.LayoutParams(0,150);
-            infoLayoutParams.setMargins(30,0,0,0);
-            infoLayoutParams.weight=16;
-            infoButton.setLayoutParams(infoLayoutParams);
-            infoButton.setId(i);
-            infoButton.setText("info");
-            infoButton.setTextSize(13);
-            infoButton.setBackgroundResource(R.drawable.roundedbutton);
+            addButton(infoButton, i, "info");
+
+
             final Button locatieButton = new Button(this);
-            LinearLayout.LayoutParams locatieLayoutParams = new LinearLayout.LayoutParams(0,150);
-            locatieLayoutParams.setMargins(30,0,0,0);
-            locatieLayoutParams.weight=18;
-            locatieButton.setLayoutParams(locatieLayoutParams);
-            locatieButton.setId(i);
-            locatieButton.setText("locatie");
-            locatieButton.setTextSize(13);
-            locatieButton.setBackgroundResource(R.drawable.roundedbutton);
+            addButton(locatieButton, i, "locatie");
 
             final Button websiteButton = new Button(this);
-            LinearLayout.LayoutParams websiteLayoutParams = new LinearLayout.LayoutParams(0,150);
-            websiteLayoutParams.setMargins(30,0,0,0);
-            websiteLayoutParams.weight=17;
-            websiteButton.setLayoutParams(websiteLayoutParams);
-            websiteButton.setId(i);
-            websiteButton.setText("website");
-            websiteButton.setTextSize(13);
-            websiteButton.setBackgroundResource(R.drawable.roundedbutton);
+            addButton(websiteButton, i, "website");
             websiteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int i = websiteButton.getId();
-                   browser(v , websites[i]);
+                    browser(v , websites[i]);
                 }
             });
             locatieButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   int j = locatieButton.getId();
+                    int j = locatieButton.getId();
                     Intent intent = new Intent(MainActivity.this,googleActivity.class);
                     intent.putExtra("latitude",latitudeArray[j]);
                     intent.putExtra("longitude", longitudeArray[j]);
@@ -356,6 +344,18 @@ public class MainActivity extends AppCompatActivity  {
             mInsideLinear.addView(linear);
 
         }
+    }
+
+    private void addButton(Button button, int number, String text){
+        LinearLayout.LayoutParams infoLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 25.0f);
+        infoLayoutParams.setMargins(15,0,0,0);
+        button.setLayoutParams(infoLayoutParams);
+        button.setId(number);
+        button.setText(text);
+        button.setSingleLine(true);
+        button.setEllipsize(TextUtils.TruncateAt.END);
+        button.setTextSize(13);
+        button.setBackgroundResource(R.drawable.roundedbutton);
     }
     private void getRestaurantsAfterLocation() throws ExecutionException, InterruptedException {
         // restaurants ophalen
