@@ -10,12 +10,12 @@ import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,13 +36,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.text.Line;
+import com.google.android.gms.vision.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -58,10 +59,11 @@ public class MainActivity extends AppCompatActivity  {
     LinearLayout mInsideLinear;
     Button terugButton;
     Button sorteerButton;
+    Button favoritesButton;
     private Context thisContext = MainActivity.this;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private List<HashMap<String, String>> detailsArray = new ArrayList<>();
-    public double latitude,longitude;
+    public double latitude, longitude;
     Button mapsButton;
     private String plaats;
     private static final int ERROR_DIALOG_REQUEST = 9001;
@@ -77,12 +79,11 @@ public class MainActivity extends AppCompatActivity  {
     public float[] longitudeArrayOpen = new float[20];
     public double[] distanceArray = new double[20];
     public double[] distanceArrayOpen = new double[20];
-    public double[] ratingArray  = new double[20];
-    public double[] ratingArrayOpen  = new double[20];
+    public double[] ratingArray = new double[20];
+    public double[] ratingArrayOpen = new double[20];
     public boolean[] openArray = new boolean[20];
-    private RestaurantInfo restaurantInfo = new RestaurantInfo();
-    private RestaurantInfo restaurantInfoOpen = new RestaurantInfo();
 
+    private RestaurantInfo restaurantInfo = new RestaurantInfo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,22 +101,20 @@ public class MainActivity extends AppCompatActivity  {
 
 
         }
-
-
         configureerButtons();
-        if(isServicesOK()){
-        init();
+        if (isServicesOK()) {
+            init();
         }
     }
-    public void onActivityResult(int requestcode,int resultcode,Intent data){
-        super.onActivityResult(requestcode,resultcode,data);
-        if(requestcode==1){
+
+    public void onActivityResult(int requestcode, int resultcode, Intent data) {
+        super.onActivityResult(requestcode, resultcode, data);
+        if (requestcode == 1) {
             String message = data.getStringExtra("sortby");
             sortby = message;
         }
         initLayout();
     }
-
 
     private void makeRecycleViewer() {
         View recyclerView = findViewById(R.id.restaurant_list);
@@ -127,35 +126,44 @@ public class MainActivity extends AppCompatActivity  {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, restaurantInfo.getRestaurants()));
     }
 
-
-    private void configureerButtons(){
+    private void configureerButtons() {
         terugButton = (Button) findViewById(R.id.terug_button);
-        mInsideLinear = (LinearLayout) findViewById(R.id.inside_linear);
+        // mInsideLinear = (LinearLayout) findViewById(R.id.inside_linear);
+        mScrollView = (ScrollView) findViewById(R.id.scrollView);
         mScrollView = (ScrollView) findViewById(R.id.scrollView);
         sorteerButton = (Button) findViewById(R.id.sorteer_button);
+        favoritesButton = (Button) findViewById(R.id.favorites_button);
 
         sorteerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sort = new Intent(MainActivity.this,SorteerActivity.class);
-                startActivityForResult(sort,1);
+                Intent sort = new Intent(MainActivity.this, SorteerActivity.class);
+                startActivityForResult(sort, 1);
+            }
+        });
+
+        favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+                startActivity(intent);
             }
         });
     }
 
-    private void init(){
+    private void init() {
         mapsButton = findViewById(R.id.maps_button);
         mapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,googleActivity.class);
+                Intent intent = new Intent(MainActivity.this, googleActivity.class);
                 calledFrom = 21;
                 startActivity(intent);
             }
         });
     }
-    private String getUrl(double latitide, double longitude, String nearbyPlace)
-    {
+
+    private String getUrl(double latitide, double longitude, String nearbyPlace) {
         StringBuilder googleURL = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googleURL.append("location=" + latitide + "," + longitude);
         googleURL.append("&radius=" + ProximityRadius);
@@ -167,24 +175,24 @@ public class MainActivity extends AppCompatActivity  {
         return googleURL.toString();
     }
 
-    public boolean isServicesOK(){
+    public boolean isServicesOK() {
         Log.d("MainActivity", "isServicesOK : checking google services version");
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
-        if (available == ConnectionResult.SUCCESS){
-            Log.d("MainActivity","isServicesOK()) : Google play services si working");
+        if (available == ConnectionResult.SUCCESS) {
+            Log.d("MainActivity", "isServicesOK()) : Google play services is working");
             return true;
-        }else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //een error is gebeurt maar we kunnen het fixen
             Log.d("MainActivity", "an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this,available,ERROR_DIALOG_REQUEST);
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }else{
-            Toast.makeText(this,"we cant me map requests",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "we cant me map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
 
-    public void sortArrayByRating(){
+    public void sortArrayByRating() {
         double temp;
         String tempNames;
         String tempWebsite;
@@ -192,27 +200,28 @@ public class MainActivity extends AppCompatActivity  {
         float tempLongitude;
         for (int i = 1; i < ratingArray.length; i++) {
             for (int j = i; j > 0; j--) {
-                if (ratingArray[j] > ratingArray [j - 1]) {
+                if (ratingArray[j] > ratingArray[j - 1]) {
                     temp = ratingArray[j];
                     ratingArray[j] = ratingArray[j - 1];
                     ratingArray[j - 1] = temp;
                     tempNames = dummyNames[j];
-                    dummyNames[j] = dummyNames[j-1];
-                    dummyNames[j-1] = tempNames;
+                    dummyNames[j] = dummyNames[j - 1];
+                    dummyNames[j - 1] = tempNames;
                     tempWebsite = websites[j];
-                    websites[j] = websites[j-1];
-                    websites[j-1] = tempWebsite;
+                    websites[j] = websites[j - 1];
+                    websites[j - 1] = tempWebsite;
                     tempLatitude = latitudeArray[j];
-                    latitudeArray[j] = latitudeArray[j-1];
-                    latitudeArray[j-1]=tempLatitude;
+                    latitudeArray[j] = latitudeArray[j - 1];
+                    latitudeArray[j - 1] = tempLatitude;
                     tempLongitude = longitudeArray[j];
-                    longitudeArray[j] = longitudeArray[j-1];
-                    longitudeArray[j-1]=tempLongitude;
+                    longitudeArray[j] = longitudeArray[j - 1];
+                    longitudeArray[j - 1] = tempLongitude;
                 }
             }
         }
     }
-    public void sortArrayByDistance(){
+
+    public void sortArrayByDistance() {
         double temp;
         String tempNames;
         String tempWebsite;
@@ -220,39 +229,41 @@ public class MainActivity extends AppCompatActivity  {
         float tempLongitude;
         for (int i = 1; i < distanceArray.length; i++) {
             for (int j = i; j > 0; j--) {
-                if (distanceArray[j] < distanceArray [j - 1]) {
+                if (distanceArray[j] < distanceArray[j - 1]) {
                     temp = distanceArray[j];
                     distanceArray[j] = distanceArray[j - 1];
                     distanceArray[j - 1] = temp;
                     tempNames = dummyNames[j];
-                    dummyNames[j] = dummyNames[j-1];
-                    dummyNames[j-1] = tempNames;
+                    dummyNames[j] = dummyNames[j - 1];
+                    dummyNames[j - 1] = tempNames;
                     tempWebsite = websites[j];
-                    websites[j] = websites[j-1];
-                    websites[j-1] = tempWebsite;
+                    websites[j] = websites[j - 1];
+                    websites[j - 1] = tempWebsite;
                     tempLatitude = latitudeArray[j];
-                    latitudeArray[j] = latitudeArray[j-1];
-                    latitudeArray[j-1]=tempLatitude;
+                    latitudeArray[j] = latitudeArray[j - 1];
+                    latitudeArray[j - 1] = tempLatitude;
                     tempLongitude = longitudeArray[j];
-                    longitudeArray[j] = longitudeArray[j-1];
-                    longitudeArray[j-1]=tempLongitude;
+                    longitudeArray[j] = longitudeArray[j - 1];
+                    longitudeArray[j - 1] = tempLongitude;
                 }
             }
         }
     }
-    public void sortArrayByOpening(){
+
+    public void sortArrayByOpening() {
         counterOpen = 0;
-        for(int i =0; i< openArray.length;i++) {
-            if(openArray[i] == true){
-               dummyNamesOpen[counterOpen] = dummyNames[i];
-               websitesOpen[counterOpen] =websites[i];
-               distanceArrayOpen[counterOpen] = distanceArray[i];
-               latitudeArrayOpen[counterOpen] = latitudeArray[i];
-               longitudeArrayOpen[counterOpen] = longitudeArray[i];
-               counterOpen++;
+        for (int i = 0; i < openArray.length; i++) {
+            if (openArray[i] == true) {
+                dummyNamesOpen[counterOpen] = dummyNames[i];
+                websitesOpen[counterOpen] = websites[i];
+                distanceArrayOpen[counterOpen] = distanceArray[i];
+                latitudeArrayOpen[counterOpen] = latitudeArray[i];
+                longitudeArrayOpen[counterOpen] = longitudeArray[i];
+                counterOpen++;
             }
         }
     }
+
     public static double distance(double lat1, double lat2, double lon1,
                                   double lon2) {
 
@@ -266,16 +277,13 @@ public class MainActivity extends AppCompatActivity  {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // convert to meters
 
-        distance = Math.pow(distance, 2) ;
+        distance = Math.pow(distance, 2);
 
         return Math.sqrt(distance);
     }
-    public void initLayout(){
 
-
-
-        // String[] dummyNames = {"Restaurant 1", "Restaurant 2" , "Restaurant 3" , "Restaurant 4", "Restaurant 5","Restaurant 6","Restaurant 7", "Restaurant 8", "Restaurant 9","Restaurant 10"};
-        for(int i = 0; i< detailsArray.size();i++) {
+    public void initLayout() {
+        for (int i = 0; i < 20; i++) {
             HashMap<String, String> restaurant = detailsArray.get(i);
             dummyNames[i] = restaurant.get("place_name");
             websites[i] = restaurant.get("website");
@@ -283,29 +291,27 @@ public class MainActivity extends AppCompatActivity  {
             longitudeArray[i] = Float.parseFloat(restaurant.get("longitude"));
             distanceArray[i] = distance(latitude, latitudeArray[i], longitude, longitudeArray[i]);
             ratingArray[i] = Double.parseDouble(restaurant.get("rating"));
-            RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[i], "number", Double.toString(ratingArray[i]), "adress");
+            RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[i], "number", Double.toString(ratingArray[i]),
+                    "adress", websites[i], latitudeArray[i], longitudeArray[i]);
             restaurantInfo.addRestaurants(rest);
-
-            if(restaurant.get("open") == "true"){
+            if (restaurant.get("open") == "true") {
                 openArray[i] = true;
-            }else{
-                openArray[i] =  false;
+            } else {
+                openArray[i] = false;
             }
-
-
         }
         makeRecycleViewer();
         //sort
-        switch (sortby){
-            case "rating":{
+        switch (sortby) {
+            case "rating": {
                 sortArrayByRating();
                 break;
             }
-            case "distance":{
+            case "distance": {
                 sortArrayByDistance();
                 break;
             }
-            case"opening":{
+            case "opening": {
                 sortArrayByOpening();
                 break;
             }
@@ -389,7 +395,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 mInsideLinear.addView(linear);
             }
-        }else {
+        } else {
             for (int i = 0; i < 20; i++) {
                 LinearLayout linear = new LinearLayout(this);
                 LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -472,7 +478,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
     private void addButton(Button button, int number, String text) {
         LinearLayout.LayoutParams infoLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 25.0f);
         infoLayoutParams.setMargins(15, 0, 0, 0);
@@ -485,12 +490,10 @@ public class MainActivity extends AppCompatActivity  {
         button.setBackgroundResource(R.drawable.roundedbutton);
     }
 
-
     private void getRestaurantsAfterLocation() throws ExecutionException, InterruptedException {
         // restaurants ophalen
 
         GetNearbyPlacesMenu getNearbyPlacesMenu = new GetNearbyPlacesMenu();
-
 
         Object transferData[] = new Object[2];
 
@@ -498,17 +501,24 @@ public class MainActivity extends AppCompatActivity  {
         transferData[0] = detailsArray;
         transferData[1] = url;
 
-      String get = getNearbyPlacesMenu.execute(transferData).get();
+        String get = getNearbyPlacesMenu.execute(transferData).get();
 
         detailsArray = getNearbyPlacesMenu.getDetailsArray();
-
-
-
-
         initLayout();
     }
 
-    public void browser(View view,String url){
+    public List<Float> checkWhichLocationIsCalled() {
+        List<Float> tempList = new ArrayList<>();
+        if (!(calledFrom == 21)) {
+            tempList.add(latitudeArray[calledFrom]);
+            tempList.add(longitudeArray[calledFrom]);
+        } else {
+            tempList.add(1.1f);
+        }
+        return tempList;
+    }
+
+    public void browser(View view, String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
@@ -548,36 +558,37 @@ public class MainActivity extends AppCompatActivity  {
 
         }
     }
-    private void getLocationPermission(){
-        Log.d(TAG,"getLocationPermission: get location  permissions");
-        String[] permissions = {FINE_LOCATION,COURSE_LOCATION};
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                mLocationPermissionsGranted = true;
 
-            }else{
-                ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUEST_CODE);
+    private void getLocationPermission() {
+        Log.d(TAG, "getLocationPermission: get location  permissions");
+        String[] permissions = {FINE_LOCATION, COURSE_LOCATION};
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionsGranted = true;
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
-            ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG,"onrequestpermissionresult : called");
+        Log.d(TAG, "onrequestpermissionresult : called");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
+        switch (requestCode) {
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    for(int i = 0; i < grantResults.length;i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
-                            Log.d(TAG,"onrequestpermissionresult : failed");
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            Log.d(TAG, "onrequestpermissionresult : failed");
                             mLocationPermissionsGranted = false;
                             return;
                         }
                     }
-                    Log.d(TAG,"onrequestpermissionresult : permission granted");
+                    Log.d(TAG, "onrequestpermissionresult : permission granted");
 
                     mLocationPermissionsGranted = true;
 
@@ -586,6 +597,24 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    public Button.OnClickListener locatieButtonClickListerner = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            RestaurantInfo.Restaurant item = (RestaurantInfo.Restaurant) v.getTag();
+            Intent intent = new Intent(MainActivity.this, googleActivity.class);
+            intent.putExtra("latitude", item.latitude);
+            intent.putExtra("longitude", item.longitude);
+            startActivity(intent);
+        }
+    };
+
+    public Button.OnClickListener websiteButtonClickListerner = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            RestaurantInfo.Restaurant item = (RestaurantInfo.Restaurant) v.getTag();
+            browser(v, item.website);
+        }
+    };
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
@@ -630,8 +659,8 @@ public class MainActivity extends AppCompatActivity  {
             holder.websiteButton.setTag(mValues.get(position));
             holder.websiteButton.setId(position);
             holder.itemView.setOnClickListener(mOnClickListener);
-            //holder.itemView.setOnClickListener(mOnClickListener);
-            //holder.itemView.setOnClickListener(websiteButtonClickListerner);
+            holder.locatieButton.setOnClickListener(mParentActivity.locatieButtonClickListerner);
+            holder.websiteButton.setOnClickListener(mParentActivity.websiteButtonClickListerner);
         }
 
         @Override
@@ -652,5 +681,4 @@ public class MainActivity extends AppCompatActivity  {
             }
         }
     }
-
 }
