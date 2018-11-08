@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
         String tempWebsite;
         float tempLatitude;
         float tempLongitude;
+        restaurantInfo.clearRestaurants();
         for (int i = 1; i < ratingArray.length; i++) {
             for (int j = i; j > 0; j--) {
                 if (ratingArray[j] > ratingArray[j - 1]) {
@@ -224,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
         String tempWebsite;
         float tempLatitude;
         float tempLongitude;
+        restaurantInfo.clearRestaurants();
         for (int i = 1; i < distanceArray.length; i++) {
             for (int j = i; j > 0; j--) {
                 if (distanceArray[j] < distanceArray[j - 1]) {
@@ -249,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortArrayByOpening() {
         counterOpen = 0;
+        restaurantInfo.clearRestaurants();
         for (int i = 0; i < openArray.length; i++) {
             if (openArray[i] == true) {
                 dummyNamesOpen[counterOpen] = dummyNames[i];
@@ -256,6 +259,9 @@ public class MainActivity extends AppCompatActivity {
                 distanceArrayOpen[counterOpen] = distanceArray[i];
                 latitudeArrayOpen[counterOpen] = latitudeArray[i];
                 longitudeArrayOpen[counterOpen] = longitudeArray[i];
+                RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNamesOpen[counterOpen], "number", Double.toString(ratingArray[i]),
+                        "adress", websitesOpen[counterOpen], latitudeArrayOpen[counterOpen], longitudeArrayOpen[counterOpen]);
+                restaurantInfo.addRestaurants(rest);
                 counterOpen++;
             }
         }
@@ -288,16 +294,12 @@ public class MainActivity extends AppCompatActivity {
             longitudeArray[i] = Float.parseFloat(restaurant.get("longitude"));
             distanceArray[i] = distance(latitude, latitudeArray[i], longitude, longitudeArray[i]);
             ratingArray[i] = Double.parseDouble(restaurant.get("rating"));
-            RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[i], "number", Double.toString(ratingArray[i]),
-                    "adress", websites[i], latitudeArray[i], longitudeArray[i]);
-            restaurantInfo.addRestaurants(rest);
             if (restaurant.get("open") == "true") {
                 openArray[i] = true;
             } else {
                 openArray[i] = false;
             }
         }
-        makeRecycleViewer();
         //sort
         switch (sortby) {
             case "rating": {
@@ -313,6 +315,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
+        for(int i = 0; i < 20; i++) {
+            RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[i], "number", Double.toString(ratingArray[i]),
+                    "adress", websites[i], latitudeArray[i], longitudeArray[i]);
+            restaurantInfo.addRestaurants(rest);
+        }
+        makeRecycleViewer();
       //  mInsideLinear.removeAllViews();
         if (sortby.equals("opening")) {
             for (int i = 0; i < counterOpen; i++) {
@@ -608,7 +616,6 @@ public class MainActivity extends AppCompatActivity {
 
         private final MainActivity mParentActivity;
         private final List<RestaurantInfo.Restaurant> mValues;
-        // private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {

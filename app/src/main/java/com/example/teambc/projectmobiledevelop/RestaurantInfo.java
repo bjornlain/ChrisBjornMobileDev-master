@@ -6,24 +6,39 @@ import java.util.List;
 import java.util.Map;
 
 public class RestaurantInfo {
-    public List<Restaurant> Restaurants = new ArrayList<Restaurant>();
+    public List<Restaurant> restaurants = new ArrayList<Restaurant>();
     public static Map<String, Restaurant> RESTAURANT_MAP = new HashMap<String, Restaurant>();
 
     public List<Restaurant> getRestaurants() {
-        return Restaurants;
-    }
-
-    public Map<String, Restaurant> getRestaurant_map() {
-        return RESTAURANT_MAP;
+        return restaurants;
     }
 
     public void addRestaurants(Restaurant restaurant) {
-        Restaurants.add(restaurant);
+        restaurants.add(restaurant);
         setRestaurant_map(restaurant);
     }
 
     private static void setRestaurant_map(Restaurant restaurant_map) {
         RESTAURANT_MAP.put(restaurant_map.name, restaurant_map);
+    }
+
+    public void clearRestaurants(){
+        restaurants.clear();
+        clearRestMap();
+    }
+
+    private static void clearRestMap(){
+        RESTAURANT_MAP.clear();
+    }
+
+    public void switchRest(int i, int j){
+        Restaurant rest = restaurants.get(i);
+        restaurants.set(i, restaurants.get(j));
+        restaurants.set(j,rest);
+    }
+
+    private static void clearRestaurant_map(){
+        RESTAURANT_MAP.clear();
     }
 
     public class Restaurant {
@@ -32,10 +47,10 @@ public class RestaurantInfo {
         public final String rating;
         public final String address;
         public final String website;
-        public final float latitude;
-        public final float longitude;
+        public final double latitude;
+        public final double longitude;
 
-        public Restaurant(String name, String number, String rating, String address, String website, float latitude, float longitude) {
+        public Restaurant(String name, String number, String rating, String address, String website, double latitude, double longitude) {
             this.name = name;
             this.number = number;
             this.rating = rating;
@@ -43,11 +58,6 @@ public class RestaurantInfo {
             this.website = website;
             this.latitude = latitude;
             this.longitude = longitude;
-        }
-
-        @Override
-        public String toString() {
-            return name;
         }
     }
 }
