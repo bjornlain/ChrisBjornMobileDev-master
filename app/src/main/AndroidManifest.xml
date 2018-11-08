@@ -34,10 +34,9 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".googleActivity"
-                    >
-
-        </activity>
+        <activity android:name=".googleActivity"></activity>
+        <activity android:name=".FavoritesActivity"></activity>
+        <activity android:name=".FavoritesDetailActivity"></activity>
         <activity
             android:name=".RestaurantDetailActivity"
             android:label="Restaurant zoeker"

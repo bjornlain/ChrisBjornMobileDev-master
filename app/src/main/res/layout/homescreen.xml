@@ -53,14 +53,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#D3D3D3"
+            android:layout_marginRight="40dp"
             android:text="Sorteer op"
             android:id="@+id/sorteer_button"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#D3D3D3"
+            android:text="favorieten"
+            android:id="@+id/favorites_button"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/maps_button"
             android:background="#D3D3D3"
-            android:layout_marginLeft="45dp"
+            android:layout_marginLeft="40dp"
             android:text="Google Maps"
             />
     </LinearLayout>
