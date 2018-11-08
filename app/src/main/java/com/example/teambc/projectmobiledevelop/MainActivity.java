@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     public double[] ratingArray = new double[20];
     public double[] ratingArrayOpen = new double[20];
     public boolean[] openArray = new boolean[20];
+    private String[] phoneNumber = new String [20];
+    private String[] address = new String [20];
 
     private RestaurantInfo restaurantInfo = new RestaurantInfo();
 
@@ -189,61 +191,58 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public void sortArrayByRating() {
+    private void rearrangeArrays(int j){
         double temp;
+        double tempD;
         String tempNames;
         String tempWebsite;
+        String tempAdres;
         float tempLatitude;
         float tempLongitude;
+
+        tempD = distanceArray[j];
+        distanceArray[j] = distanceArray[j - 1];
+        distanceArray[j - 1] = tempD;
+        temp = ratingArray[j];
+        ratingArray[j] = ratingArray[j - 1];
+        ratingArray[j - 1] = temp;
+        tempNames = dummyNames[j];
+        dummyNames[j] = dummyNames[j - 1];
+        dummyNames[j - 1] = tempNames;
+        tempWebsite = websites[j];
+        websites[j] = websites[j - 1];
+        websites[j - 1] = tempWebsite;
+        tempLatitude = latitudeArray[j];
+        latitudeArray[j] = latitudeArray[j - 1];
+        latitudeArray[j - 1] = tempLatitude;
+        tempLongitude = longitudeArray[j];
+        longitudeArray[j] = longitudeArray[j - 1];
+        longitudeArray[j - 1] = tempLongitude;
+        tempAdres = address[j];
+        address[j] = address[j - 1];
+        address[j-1] = tempAdres;
+        String tempPhoneN = phoneNumber[j];
+        phoneNumber[j] = phoneNumber[j-1];
+        phoneNumber[j-1]= tempPhoneN;
+    }
+
+    public void sortArrayByRating() {
         restaurantInfo.clearRestaurants();
         for (int i = 1; i < ratingArray.length; i++) {
             for (int j = i; j > 0; j--) {
                 if (ratingArray[j] > ratingArray[j - 1]) {
-                    temp = ratingArray[j];
-                    ratingArray[j] = ratingArray[j - 1];
-                    ratingArray[j - 1] = temp;
-                    tempNames = dummyNames[j];
-                    dummyNames[j] = dummyNames[j - 1];
-                    dummyNames[j - 1] = tempNames;
-                    tempWebsite = websites[j];
-                    websites[j] = websites[j - 1];
-                    websites[j - 1] = tempWebsite;
-                    tempLatitude = latitudeArray[j];
-                    latitudeArray[j] = latitudeArray[j - 1];
-                    latitudeArray[j - 1] = tempLatitude;
-                    tempLongitude = longitudeArray[j];
-                    longitudeArray[j] = longitudeArray[j - 1];
-                    longitudeArray[j - 1] = tempLongitude;
+                    rearrangeArrays(j);
                 }
             }
         }
     }
 
     public void sortArrayByDistance() {
-        double temp;
-        String tempNames;
-        String tempWebsite;
-        float tempLatitude;
-        float tempLongitude;
         restaurantInfo.clearRestaurants();
         for (int i = 1; i < distanceArray.length; i++) {
             for (int j = i; j > 0; j--) {
                 if (distanceArray[j] < distanceArray[j - 1]) {
-                    temp = distanceArray[j];
-                    distanceArray[j] = distanceArray[j - 1];
-                    distanceArray[j - 1] = temp;
-                    tempNames = dummyNames[j];
-                    dummyNames[j] = dummyNames[j - 1];
-                    dummyNames[j - 1] = tempNames;
-                    tempWebsite = websites[j];
-                    websites[j] = websites[j - 1];
-                    websites[j - 1] = tempWebsite;
-                    tempLatitude = latitudeArray[j];
-                    latitudeArray[j] = latitudeArray[j - 1];
-                    latitudeArray[j - 1] = tempLatitude;
-                    tempLongitude = longitudeArray[j];
-                    longitudeArray[j] = longitudeArray[j - 1];
-                    longitudeArray[j - 1] = tempLongitude;
+                    rearrangeArrays(j);
                 }
             }
         }
@@ -259,11 +258,19 @@ public class MainActivity extends AppCompatActivity {
                 distanceArrayOpen[counterOpen] = distanceArray[i];
                 latitudeArrayOpen[counterOpen] = latitudeArray[i];
                 longitudeArrayOpen[counterOpen] = longitudeArray[i];
-                RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNamesOpen[counterOpen], "number", Double.toString(ratingArray[i]),
-                        "adress", websitesOpen[counterOpen], latitudeArrayOpen[counterOpen], longitudeArrayOpen[counterOpen]);
+                RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNamesOpen[counterOpen], phoneNumber[i], Double.toString(ratingArray[i]),
+                        address[i], websitesOpen[counterOpen], latitudeArrayOpen[counterOpen], longitudeArrayOpen[counterOpen]);
                 restaurantInfo.addRestaurants(rest);
                 counterOpen++;
             }
+        }
+    }
+
+    private void restaurantAdder(){
+        for(int i = 0; i < 20; i++) {
+            RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[i], phoneNumber[i], Double.toString(ratingArray[i]),
+                    address[i], websites[i], latitudeArray[i], longitudeArray[i]);
+            restaurantInfo.addRestaurants(rest);
         }
     }
 
@@ -294,6 +301,8 @@ public class MainActivity extends AppCompatActivity {
             longitudeArray[i] = Float.parseFloat(restaurant.get("longitude"));
             distanceArray[i] = distance(latitude, latitudeArray[i], longitude, longitudeArray[i]);
             ratingArray[i] = Double.parseDouble(restaurant.get("rating"));
+            phoneNumber[i] = restaurant.get("gsm_nummer");
+            address[i] = restaurant.get("vicinity");
             if (restaurant.get("open") == "true") {
                 openArray[i] = true;
             } else {
@@ -304,10 +313,12 @@ public class MainActivity extends AppCompatActivity {
         switch (sortby) {
             case "rating": {
                 sortArrayByRating();
+                restaurantAdder();
                 break;
             }
             case "distance": {
                 sortArrayByDistance();
+                restaurantAdder();
                 break;
             }
             case "opening": {
@@ -315,11 +326,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        for(int i = 0; i < 20; i++) {
-            RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[i], "number", Double.toString(ratingArray[i]),
-                    "adress", websites[i], latitudeArray[i], longitudeArray[i]);
-            restaurantInfo.addRestaurants(rest);
-        }
+
         makeRecycleViewer();
       //  mInsideLinear.removeAllViews();
         if (sortby.equals("opening")) {

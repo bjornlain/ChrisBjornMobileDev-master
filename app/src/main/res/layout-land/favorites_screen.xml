@@ -16,17 +16,17 @@
             android:layout_height="match_parent"
             android:weightSum="2"
             >
+            <fragment android:name="com.example.teambc.projectmobiledevelop.FavoritesDetailFragment"           android:id="@+id/detail"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+
             <fragment android:name="com.example.teambc.projectmobiledevelop.FavoritesFragment"
                 android:id="@+id/list"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 />
-
-            <fragment android:name="com.example.teambc.projectmobiledevelop.FavoritesDetailFragment"           android:id="@+id/detail"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"/>
 
         </LinearLayout>
 

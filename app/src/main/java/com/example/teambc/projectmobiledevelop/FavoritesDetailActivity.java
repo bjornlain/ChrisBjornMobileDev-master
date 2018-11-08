@@ -21,7 +21,7 @@ public class FavoritesDetailActivity extends FragmentActivity {
             RestaurantInfo.Restaurant rest = RestaurantInfo.RESTAURANT_MAP.get(item);
             viewDetails.setText(rest.name+ "\n\n tel:" + rest.number + "\n\n website:" + rest.website + "\n\n adres" + rest.address );
         }else{
-            viewDetails.setText("item");
+            viewDetails.setText("");
         }
     }
 

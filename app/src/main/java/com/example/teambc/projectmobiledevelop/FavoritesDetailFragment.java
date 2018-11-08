@@ -27,9 +27,9 @@ public class FavoritesDetailFragment extends Fragment {
         }
         if(RestaurantInfo.RESTAURANT_MAP.containsKey(item)){
             RestaurantInfo.Restaurant rest = RestaurantInfo.RESTAURANT_MAP.get(item);
-            viewDetails.setText("\t" + rest.number + "\n\t" + rest.website + "\n\t" + rest.address );
+            viewDetails.setText("\t tel: " + rest.number + "\n\t" + rest.website + "\n\n\t " + rest.address );
         }else{
-            viewDetails.setText("item");
+            viewDetails.setText("");
         }
         return view;
     }
