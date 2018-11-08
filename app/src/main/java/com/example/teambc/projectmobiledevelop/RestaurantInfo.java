@@ -32,10 +32,10 @@ public class RestaurantInfo {
         public final String rating;
         public final String address;
         public final String website;
-        public final double latitude;
-        public final double longitude;
+        public final float latitude;
+        public final float longitude;
 
-        public Restaurant(String name, String number, String rating, String address, String website, double latitude, double longitude) {
+        public Restaurant(String name, String number, String rating, String address, String website, float latitude, float longitude) {
             this.name = name;
             this.number = number;
             this.rating = rating;
