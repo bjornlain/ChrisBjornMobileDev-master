@@ -253,13 +253,8 @@ public class MainActivity extends AppCompatActivity {
         restaurantInfo.clearRestaurants();
         for (int i = 0; i < openArray.length; i++) {
             if (openArray[i] == true) {
-                dummyNamesOpen[counterOpen] = dummyNames[i];
-                websitesOpen[counterOpen] = websites[i];
-                distanceArrayOpen[counterOpen] = distanceArray[i];
-                latitudeArrayOpen[counterOpen] = latitudeArray[i];
-                longitudeArrayOpen[counterOpen] = longitudeArray[i];
-                RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNamesOpen[counterOpen], phoneNumber[i], Double.toString(ratingArray[i]),
-                        address[i], websitesOpen[counterOpen], latitudeArrayOpen[counterOpen], longitudeArrayOpen[counterOpen]);
+                RestaurantInfo.Restaurant rest = restaurantInfo.new Restaurant(dummyNames[counterOpen], phoneNumber[counterOpen], Double.toString(ratingArray[counterOpen]),
+                        address[counterOpen], websites[counterOpen], latitudeArray[counterOpen], longitudeArray[counterOpen]);
                 restaurantInfo.addRestaurants(rest);
                 counterOpen++;
             }
@@ -328,122 +323,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         makeRecycleViewer();
-      //  mInsideLinear.removeAllViews();
-        if (sortby.equals("opening")) {
-            for (int i = 0; i < counterOpen; i++) {
-                LinearLayout linear = new LinearLayout(this);
-                LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearLayoutParams.weight = 100;
-                linear.setOrientation(LinearLayout.HORIZONTAL);
-                linear.setPadding(10, 0, 0, 10);
-                linear.setLayoutParams(linearLayoutParams);
-                TextView restName = new TextView(this);
 
-
-                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 20f);
-                restName.setLayoutParams(textViewParams);
-                if (dummyNamesOpen[i].length() > 20) {
-                    String[] split = dummyNamesOpen[i].split(" ");
-                    String text = "";
-                    Boolean check = true;
-                    for (int j = 0; j < split.length; j++) {
-                        if (j == split.length - 1) {
-                            text += split[j];
-                        } else {
-                            if ((split[j] + " " + split[j + 1]).length() >= 20) {
-                                text += split[j] + "\n" + split[j + 1];
-                                j++;
-                            } else {
-                                text += split[j] + " ";
-                            }
-                        }
-                    }
-                    restName.setText(text);
-                } else {
-                    restName.setText(dummyNamesOpen[i]);
-                }
-                restName.setTextSize(18);
-                restName.setMaxLines(2);
-                restName.setEllipsize(TextUtils.TruncateAt.END);
-
-
-                Button infoButton = new Button(this);
-                addButton(infoButton, i, "info");
-
-
-                final Button locatieButton = new Button(this);
-                addButton(locatieButton, i, "locatie");
-
-                final Button websiteButton = new Button(this);
-                addButton(websiteButton, i, "website");
-                websiteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int i = websiteButton.getId();
-                        browser(v, websitesOpen[i]);
-                    }
-                });
-                locatieButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int j = locatieButton.getId();
-                        Intent intent = new Intent(MainActivity.this, googleActivity.class);
-                        intent.putExtra("latitude", latitudeArrayOpen[j]);
-                        intent.putExtra("longitude", longitudeArrayOpen[j]);
-                        startActivity(intent);
-                    }
-                });
-                infoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, "InfoButton" + (v.getId() + 1) + " is clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                linear.addView(restName);
-                linear.addView(infoButton);
-                linear.addView(locatieButton);
-                linear.addView(websiteButton);
-
-         //       mInsideLinear.addView(linear);
-            }
-        } else {
             for (int i = 0; i < 20; i++) {
-                LinearLayout linear = new LinearLayout(this);
-                LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearLayoutParams.weight = 100;
-                linear.setOrientation(LinearLayout.HORIZONTAL);
-                linear.setPadding(10, 0, 0, 10);
-                linear.setLayoutParams(linearLayoutParams);
-                TextView restName = new TextView(this);
-
-
-                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 20f);
-                restName.setLayoutParams(textViewParams);
-                if (dummyNames[i].length() > 20) {
-                    String[] split = dummyNames[i].split(" ");
-                    String text = "";
-                    Boolean check = true;
-                    for (int j = 0; j < split.length; j++) {
-                        if (j == split.length - 1) {
-                            text += split[j];
-                        } else {
-                            if ((split[j] + " " + split[j + 1]).length() >= 20) {
-                                text += split[j] + "\n" + split[j + 1];
-                                j++;
-                            } else {
-                                text += split[j] + " ";
-                            }
-                        }
-                    }
-                    restName.setText(text);
-                } else {
-                    restName.setText(dummyNames[i]);
-                }
-                restName.setTextSize(18);
-                restName.setMaxLines(2);
-                restName.setEllipsize(TextUtils.TruncateAt.END);
-
 
                 Button infoButton = new Button(this);
                 addButton(infoButton, i, "info");
@@ -454,40 +335,10 @@ public class MainActivity extends AppCompatActivity {
 
                 final Button websiteButton = new Button(this);
                 addButton(websiteButton, i, "website");
-                websiteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int i = websiteButton.getId();
-                        browser(v, websites[i]);
-                    }
-                });
-                locatieButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int j = locatieButton.getId();
-                        Intent intent = new Intent(MainActivity.this, googleActivity.class);
-                        intent.putExtra("latitude", latitudeArray[j]);
-                        intent.putExtra("longitude", longitudeArray[j]);
-                        startActivity(intent);
-                    }
-                });
-                infoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, "InfoButton" + (v.getId() + 1) + " is clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                linear.addView(restName);
-                linear.addView(infoButton);
-                linear.addView(locatieButton);
-                linear.addView(websiteButton);
-
-           //     mInsideLinear.addView(linear);
 
             }
         }
-    }
+
 
 
     private void addButton(Button button, int number, String text) {
