@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
     Button mapsButton;
     private String plaats;
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    public int I;
-    public int calledFrom;
     public String[] dummyNames = new String[20];
     public String[] dummyNamesOpen = new String[20];
     public String[] websites = new String[20];
@@ -157,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, googleActivity.class);
-                calledFrom = 21;
                 startActivity(intent);
             }
         });
@@ -316,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        mInsideLinear.removeAllViews();
+      //  mInsideLinear.removeAllViews();
         if (sortby.equals("opening")) {
             for (int i = 0; i < counterOpen; i++) {
                 LinearLayout linear = new LinearLayout(this);
@@ -393,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                 linear.addView(locatieButton);
                 linear.addView(websiteButton);
 
-                mInsideLinear.addView(linear);
+         //       mInsideLinear.addView(linear);
             }
         } else {
             for (int i = 0; i < 20; i++) {
@@ -471,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
                 linear.addView(locatieButton);
                 linear.addView(websiteButton);
 
-                mInsideLinear.addView(linear);
+           //     mInsideLinear.addView(linear);
 
             }
         }
@@ -507,16 +504,6 @@ public class MainActivity extends AppCompatActivity {
         initLayout();
     }
 
-    public List<Float> checkWhichLocationIsCalled() {
-        List<Float> tempList = new ArrayList<>();
-        if (!(calledFrom == 21)) {
-            tempList.add(latitudeArray[calledFrom]);
-            tempList.add(longitudeArray[calledFrom]);
-        } else {
-            tempList.add(1.1f);
-        }
-        return tempList;
-    }
 
     public void browser(View view, String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
