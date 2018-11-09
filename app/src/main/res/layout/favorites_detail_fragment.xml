@@ -9,14 +9,22 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#2aa5a5">
 
         <TextView
             android:id="@+id/detailTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="14pt"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/text_dark"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="-2"
+            android:shadowDy="-2"
+            android:shadowRadius="1"/>
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

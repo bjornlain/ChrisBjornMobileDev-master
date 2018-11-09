@@ -46,7 +46,7 @@ public class RestaurantDetailFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     mDatabaseHelper.addName(mItem.name);
-                    Toast.makeText(context, "Added" + mItem.name + " to favorites",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Added" + mItem.name + " to favorites", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -57,9 +57,9 @@ public class RestaurantDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.restaurant_info, container, false);
 
-        // Show the dummy content as text in a TextView.
+		// Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText("Rating: " + mItem.rating + "\nNummer: " + mItem.number + "\nAdres: " + mItem.address + "\nWebsite: "
+            ((TextView) rootView.findViewById(R.id.item_detail)).setText("Rating: " + mItem.rating + "\n\nNummer: " + mItem.number + "\n\nAdres: " + mItem.address + "\n\nWebsite: "
             + mItem.website);
         }
 
